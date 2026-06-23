@@ -1,0 +1,154 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Variabile de brand RIVO.
+  Schimbă `--accent` pentru a modifica accentul premium în tot site-ul.
+*/
+:root {
+  --ink: #0e0e10;
+  --ink-soft: #15151a;
+  --bone: #f4f1ea;
+  --accent: #b8956a;
+  --accent-soft: #c9ac85;
+
+  --header-h: 88px;
+}
+
+@layer base {
+  * {
+    @apply border-bone/10;
+  }
+
+  html {
+    /* Smooth scroll-ul real e gestionat de Lenis; păstrăm fallback-ul nativ. */
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Lenis activ: dezactivăm smooth-ul nativ ca să nu se bată cu JS-ul. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  body {
+    @apply bg-ink text-bone font-sans antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--ink);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-serif tracking-tightest;
+    text-wrap: balance;
+  }
+
+  /* Bară de scroll discretă, premium */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--ink);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #2a2a30;
+    border-radius: 999px;
+    border: 3px solid var(--ink);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+  }
+}
+
+@layer components {
+  .container-rivo {
+    @apply mx-auto w-full max-w-container px-6 sm:px-8 lg:px-12;
+  }
+
+  /* Numerotare de secțiune: 01 — Despre */
+  .section-index {
+    @apply font-sans text-xs uppercase tracking-[0.35em] text-accent;
+  }
+
+  /* Linie fină despărțitoare premium */
+  .hairline {
+    @apply h-px w-full bg-gradient-to-r from-bone/0 via-bone/15 to-bone/0;
+  }
+
+  /* Reveal pe linii pentru titluri (mask) */
+  .line-mask {
+    overflow: hidden;
+    display: block;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Link cu underline animat */
+  .link-underline {
+    position: relative;
+  }
+  .link-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    height: 1px;
+    width: 100%;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .link-underline:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+/* Cursor personalizat — ascundem cursorul nativ doar pe desktop cu pointer fin. */
+@media (hover: hover) and (pointer: fine) {
+  .has-custom-cursor,
+  .has-custom-cursor * {
+    cursor: none;
+  }
+}
+
+/* Respectă preferința de mișcare redusă. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Grain subtil pe fundal pentru senzație cinematică. */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}

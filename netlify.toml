@@ -1,0 +1,12 @@
+# Configurare deploy Netlify pentru Next.js (App Router).
+# Netlify detectează automat Next și folosește runtime-ul oficial pentru
+# SSR, rute API și pagini dinamice (force-dynamic).
+
+[build]
+  command = "npm run build"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
