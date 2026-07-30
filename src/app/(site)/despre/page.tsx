@@ -60,14 +60,6 @@ const VALUES = [
   },
 ];
 
-const MILESTONES = [
-  { year: "2013", text: "RIVO se naște la Satu Mare, cu primul teren achiziționat." },
-  { year: "2016", text: "Finalizăm primul ansamblu rezidențial — 48 de apartamente." },
-  { year: "2020", text: "Depășim 1.000 de unități livrate în diverse proiecte." },
-  { year: "2023", text: "Lansăm RIVO Green Court, complet locuit în primul an." },
-  { year: "2026", text: "Patru proiecte simultane în dezvoltare. Și abia începem." },
-];
-
 export default function DesprePage() {
   return (
     <>
@@ -175,32 +167,11 @@ export default function DesprePage() {
         </div>
       </section>
 
-      {/* Istoric / realizări */}
-      <section className="border-t border-bone/10 py-24 lg:py-32">
-        <div className="container-rivo">
-          <SectionHeading index="03" eyebrow="Parcurs" title="Repere în timp" />
-          <div className="mt-14 border-t border-bone/10">
-            {MILESTONES.map((m) => (
-              <Reveal key={m.year}>
-                <div className="group grid grid-cols-1 gap-2 border-b border-bone/10 py-8 transition-colors hover:bg-ink-soft/50 sm:grid-cols-12 sm:items-baseline sm:gap-8">
-                  <span className="font-serif text-3xl text-accent sm:col-span-2">
-                    {m.year}
-                  </span>
-                  <p className="font-sans text-lg text-bone/75 sm:col-span-10">
-                    {m.text}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Echipă */}
       <section className="border-t border-bone/10 py-24 lg:py-32">
         <div className="container-rivo">
           <SectionHeading
-            index="04"
+            index="03"
             eyebrow="Echipă"
             title="Oamenii din spatele RIVO"
             description="O echipă mică, dedicată, care pune pasiune în fiecare metru pătrat."
