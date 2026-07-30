@@ -38,13 +38,13 @@ export const metadata: Metadata = {
     locale: "ro_RO",
     url: SITE_URL,
     siteName: "RIVO Imobiliare",
-    title: "RIVO Imobiliare — Construim viitorul orașului Satu Mare",
+    title: "RIVO Imobiliare — Construit în jurul viitorului tău",
     description:
       "Proiecte rezidențiale și mixte premium în Satu Mare. Descoperă ansamblurile RIVO.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "RIVO Imobiliare — Construim viitorul orașului Satu Mare",
+    title: "RIVO Imobiliare — Construit în jurul viitorului tău",
     description:
       "Proiecte rezidențiale și mixte premium în Satu Mare. Descoperă ansamblurile RIVO.",
   },
