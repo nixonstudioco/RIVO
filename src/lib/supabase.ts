@@ -26,6 +26,12 @@ export function getSupabaseAdmin(): SupabaseClient {
   if (!client) {
     client = createClient(URL!, SERVICE_KEY!, {
       auth: { persistSession: false, autoRefreshToken: false },
+      global: {
+        // Evită cache-ul de fetch al Next.js — citirile trebuie să fie mereu proaspete
+        // (altfel modificările din /admin nu apar imediat pe site).
+        fetch: (input, init) =>
+          fetch(input as RequestInfo, { ...init, cache: "no-store" }),
+      },
     });
   }
   return client;

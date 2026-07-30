@@ -8,8 +8,8 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   },
   hero: {
     eyebrow: "Dezvoltator imobiliar · Satu Mare",
-    titleTop: "Construim viitorul",
-    titleAccent: "orașului Satu Mare",
+    titleTop: "Construit în jurul",
+    titleAccent: "viitorului tău",
     subtitle:
       "Proiecte rezidențiale și mixte premium, gândite pentru oameni care vor mai mult de la locul în care trăiesc. Calitate, transparență și predare la timp.",
   },
