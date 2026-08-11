@@ -1,16 +1,19 @@
 "use client";
 
 import { useRef } from "react";
-import dynamic from "next/dynamic";
-import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import { ArrowDown } from "lucide-react";
 import MagneticButton from "@/components/ui/MagneticButton";
 import type { SiteSettings } from "@/lib/types";
 
-// 3D doar pe client, fără SSR, încărcat lazy ca să nu blocheze hero-ul.
-const HeroScene = dynamic(() => import("@/components/three/HeroScene"), {
-  ssr: false,
-});
+const HERO_VIDEO = "/video/hero-drona.mp4";
+const HERO_POSTER = "/video/hero-drona-poster.jpg";
 
 const lineVariants = {
   hidden: { y: "120%" },
@@ -26,6 +29,7 @@ const lineVariants = {
 
 export default function Hero({ hero }: { hero: SiteSettings["hero"] }) {
   const ref = useRef<HTMLDivElement>(null);
+  const reduceMotion = useReducedMotion();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
@@ -40,15 +44,42 @@ export default function Hero({ hero }: { hero: SiteSettings["hero"] }) {
       ref={ref}
       className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden"
     >
-      {/* Fundal 3D + gradiente cinematice */}
+      {/* Fundal video (dronă) + gradiente cinematice */}
       <motion.div
         style={{ scale: sceneScale }}
         className="pointer-events-none absolute inset-0 -z-10"
       >
-        <div className="absolute inset-0 opacity-90">
-          <HeroScene />
-        </div>
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_0%,_rgba(14,14,16,0.4)_55%,_rgba(14,14,16,0.95)_100%)]" />
+        {/* Cu „reduce motion" nu rulăm video — rămâne cadrul static. */}
+        {reduceMotion ? (
+          <Image
+            src={HERO_POSTER}
+            alt=""
+            aria-hidden
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover"
+          />
+        ) : (
+          <video
+            className="absolute inset-0 h-full w-full object-cover"
+            src={HERO_VIDEO}
+            poster={HERO_POSTER}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            aria-hidden
+          />
+        )}
+
+        {/* Filmarea e de zi, foarte luminoasă — straturile de mai jos sunt
+            necesare ca textul crem să rămână lizibil peste ea. */}
+        <div className="absolute inset-0 bg-ink/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-ink/55 via-ink/15 to-transparent" />
+        {/* Navbar peste cer deschis. */}
+        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-ink/85 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-ink to-transparent" />
       </motion.div>
 
