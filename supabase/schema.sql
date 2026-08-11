@@ -15,12 +15,18 @@ create table if not exists rivo_projects (
   cover       text not null default '',
   description text not null default '',
   gallery     jsonb not null default '[]'::jsonb,
+  stages      jsonb not null default '[]'::jsonb,
   specs       jsonb not null default '[]'::jsonb,
   typologies  jsonb not null default '[]'::jsonb,
   amenities   jsonb not null default '[]'::jsonb,
   map         jsonb not null default '{"lat":47.7929,"lng":22.8857}'::jsonb,
   created_at  timestamptz not null default now()
 );
+
+-- Migrare pentru bazele create înainte de galeria pe etape.
+-- `create table if not exists` de mai sus nu adaugă coloane la un tabel existent.
+alter table rivo_projects
+  add column if not exists stages jsonb not null default '[]'::jsonb;
 
 create table if not exists rivo_submissions (
   id           text primary key,

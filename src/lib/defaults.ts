@@ -15,16 +15,14 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   },
   manifest:
     "Pentru noi, imobiliarele nu înseamnă doar beton și planuri. Înseamnă comunități, lumină, liniște și locuri în care viața se așază frumos. Construim cu răbdare, cu materiale care durează și cu respect pentru orașul nostru.",
-  stats: [
-    { value: 12, suffix: "+", label: "Ani de experiență" },
-    { value: 9, suffix: "", label: "Proiecte livrate" },
-    { value: 1450, suffix: "+", label: "Apartamente & case" },
-    { value: 186, suffix: "K", label: "m² construiți" },
-  ],
+  // RIVO e un dezvoltator nou — nu afișăm statistici de istoric („ani de
+  // experiență", „proiecte livrate"). Secțiunea se ascunde când lista e goală
+  // și poate fi repopulată din /admin → Setări când există cifre reale.
+  stats: [],
   contact: {
-    address: "Str. Exemplu nr. 10, 440000 Satu Mare, România",
-    phone: "+40 700 000 000",
-    email: "contact@rivo-imobiliare.ro",
+    address: "Sălciilor 16, Satu Mare",
+    phone: "0744 578 985 / 0749 333 334",
+    email: "office@rivoimobiliare.com",
     program: "Luni–Vineri: 09:00–18:00\nSâmbătă: 10:00–14:00",
   },
   social: {

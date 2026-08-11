@@ -43,6 +43,13 @@ export default async function ProjectPage({
     .filter((p) => p.slug !== project.slug)
     .slice(0, 3);
 
+  // Proiectele noi pot avea încă secțiuni necompletate — nu randăm titluri goale.
+  const hasGallery =
+    project.gallery.length > 0 ||
+    project.stages.some((s) => s.images.length > 0);
+  const hasTypologies = project.typologies.length > 0;
+  const hasAmenities = project.amenities.length > 0;
+
   return (
     <article>
       <ProjectDetailHero project={project} />
@@ -73,38 +80,48 @@ export default async function ProjectPage({
           </div>
 
           {/* Specificații */}
-          <div className="lg:col-span-5">
-            <Reveal>
-              <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-bone/10 bg-bone/10">
-                {project.specs.map((spec) => (
-                  <div key={spec.label} className="bg-ink p-6">
-                    <dt className="font-sans text-xs uppercase tracking-[0.14em] text-bone/45">
-                      {spec.label}
-                    </dt>
-                    <dd className="mt-2 font-serif text-xl text-bone">
-                      {spec.value}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </Reveal>
-          </div>
+          {project.specs.length > 0 && (
+            <div className="lg:col-span-5">
+              <Reveal>
+                <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-bone/10 bg-bone/10">
+                  {project.specs.map((spec) => (
+                    <div key={spec.label} className="bg-ink p-6">
+                      <dt className="font-sans text-xs uppercase tracking-[0.14em] text-bone/45">
+                        {spec.label}
+                      </dt>
+                      <dd className="mt-2 font-serif text-xl text-bone">
+                        {spec.value}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </Reveal>
+            </div>
+          )}
         </div>
       </section>
 
       {/* Galerie */}
-      <section className="container-rivo py-12 lg:py-16">
-        <Reveal>
-          <h2 className="mb-10 text-3xl tracking-tightest sm:text-4xl">
-            Galerie
-          </h2>
-        </Reveal>
-        <ProjectGallery images={project.gallery} name={project.name} />
-      </section>
+      {hasGallery && (
+        <section className="container-rivo py-12 lg:py-16">
+          <Reveal>
+            <h2 className="mb-10 text-3xl tracking-tightest sm:text-4xl">
+              Galerie
+            </h2>
+          </Reveal>
+          <ProjectGallery
+            images={project.gallery}
+            stages={project.stages}
+            name={project.name}
+          />
+        </section>
+      )}
 
       {/* Tipologii + facilități */}
+      {(hasTypologies || hasAmenities) && (
       <section className="container-rivo py-24 lg:py-32">
         <div className="grid gap-16 lg:grid-cols-2">
+          {hasTypologies && (
           <div>
             <Reveal>
               <h2 className="text-3xl tracking-tightest sm:text-4xl">
@@ -133,7 +150,9 @@ export default async function ProjectPage({
               Planurile detaliate sunt disponibile la cerere.
             </p>
           </div>
+          )}
 
+          {hasAmenities && (
           <div>
             <Reveal>
               <h2 className="text-3xl tracking-tightest sm:text-4xl">
@@ -153,8 +172,10 @@ export default async function ProjectPage({
               ))}
             </ul>
           </div>
+          )}
         </div>
       </section>
+      )}
 
       {/* Locație / hartă */}
       <section className="container-rivo py-12 lg:py-16">

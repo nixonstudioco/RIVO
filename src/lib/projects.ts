@@ -24,6 +24,18 @@ export interface ProjectTypology {
   rooms: string;
 }
 
+/**
+ * O etapă de dezvoltare a proiectului, cu propriul set de imagini.
+ * Permite împărțirea galeriei pe luni / faze de șantier.
+ */
+export interface ProjectStage {
+  /** Denumirea etapei, ex: „Fundație", „Structură la roșu". */
+  label: string;
+  /** Luna etapei în format `YYYY-MM` (input type="month"). Poate fi gol. */
+  date: string;
+  images: string[];
+}
+
 export interface Project {
   slug: string;
   name: string;
@@ -36,6 +48,8 @@ export interface Project {
   progress: number;
   cover: string;
   gallery: string[];
+  /** Opțional: galeria împărțită pe etape/luni de dezvoltare. */
+  stages: ProjectStage[];
   description: string;
   specs: ProjectSpec[];
   typologies: ProjectTypology[];
@@ -57,258 +71,86 @@ export const TYPE_LABELS: Record<ProjectType, string> = {
   comercial: "Comercial",
 };
 
+const MONTHS_RO = [
+  "Ianuarie",
+  "Februarie",
+  "Martie",
+  "Aprilie",
+  "Mai",
+  "Iunie",
+  "Iulie",
+  "August",
+  "Septembrie",
+  "Octombrie",
+  "Noiembrie",
+  "Decembrie",
+];
+
+/**
+ * `2026-03` -> `Martie 2026`. Dacă formatul nu e valid, întoarce textul brut
+ * (permite etichete libere gen „Faza 1").
+ */
+export function formatStageDate(date: string): string {
+  const m = /^(\d{4})-(\d{2})$/.exec(date.trim());
+  if (!m) return date.trim();
+  const month = MONTHS_RO[Number(m[2]) - 1];
+  return month ? `${month} ${m[1]}` : date.trim();
+}
+
+/** Eticheta afișată pentru o etapă (nume + lună, oricare există). */
+export function stageLabel(stage: ProjectStage): string {
+  const date = formatStageDate(stage.date);
+  if (stage.label && date) return `${stage.label} · ${date}`;
+  return stage.label || date || "Etapă";
+}
+
 const U = (id: string, w = 1600) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
 
-/** Date seed. Sursa „vie" la runtime este store-ul (`@/lib/store`). */
+/**
+ * Date seed. Sursa „vie" la runtime este store-ul (`@/lib/store`).
+ *
+ * TODO(RIVO): imaginile sunt placeholdere, iar specificațiile/tipologiile/
+ * facilitățile sunt goale intenționat — se completează cu date reale din
+ * /admin → Proiecte. Nu adăuga aici informații nedocumentate.
+ */
 export const SEED_PROJECTS: Project[] = [
   {
-    slug: "rivo-park-residence",
-    name: "RIVO Park Residence",
-    tagline: "Locuire premium la marginea parcului central.",
-    location: "Zona Parcului Central, Satu Mare",
-    status: "in-vanzare",
+    slug: "cubic-residence",
+    name: "Cubic Residence",
+    tagline: "Ansamblu rezidențial RIVO în Satu Mare.",
+    location: "Satu Mare",
+    status: "in-curand",
     type: "rezidential",
-    year: "2025",
-    progress: 68,
+    year: "",
+    progress: 0,
     cover: U("photo-1545324418-cc1a3fa10c00"),
-    gallery: [
-      U("photo-1545324418-cc1a3fa10c00"),
-      U("photo-1512917774080-9991f1c4c750"),
-      U("photo-1486406146926-c627a92ad1ab"),
-      U("photo-1493809842364-78817add7ffb"),
-    ],
+    gallery: [],
+    stages: [],
     description:
-      "RIVO Park Residence redefinește standardul locuirii urbane în Satu Mare. Un ansamblu de apartamente cu finisaje premium, generos vitrate, orientate spre verdeața parcului central. Spațiile comune sunt gândite ca o extensie a locuinței: lobby cu recepție, grădini interioare și parcare subterană.",
-    specs: [
-      { label: "Apartamente", value: "84 unități" },
-      { label: "Regim înălțime", value: "S+P+6E" },
-      { label: "Tipologii", value: "2–4 camere" },
-      { label: "Suprafețe", value: "54–138 m²" },
-      { label: "Parcare", value: "Subterană + exterioară" },
-      { label: "Predare", value: "Q4 2025" },
-    ],
-    typologies: [
-      { name: "2 camere", surface: "54–66 m²", rooms: "2" },
-      { name: "3 camere", surface: "78–96 m²", rooms: "3" },
-      { name: "4 camere", surface: "112–138 m²", rooms: "4" },
-    ],
-    amenities: [
-      "Parcare subterană",
-      "Lobby cu recepție",
-      "Grădini interioare",
-      "Sistem smart-home",
-      "Încălzire în pardoseală",
-      "Acces securizat",
-    ],
+      "Cubic Residence este un ansamblu rezidențial dezvoltat de RIVO Imobiliare în Satu Mare. Detaliile complete — tipologii, suprafețe, facilități și termene de predare — urmează să fie publicate.",
+    specs: [],
+    typologies: [],
+    amenities: [],
     map: { lat: 47.7929, lng: 22.8857 },
   },
   {
-    slug: "rivo-corso-mixed",
-    name: "RIVO Corso",
-    tagline: "Ansamblu mixt — birouri, retail și locuințe.",
-    location: "Bulevardul Transilvania, Satu Mare",
-    status: "in-constructie",
-    type: "mixt",
-    year: "2026",
-    progress: 41,
-    cover: U("photo-1486325212027-8081e485255e"),
-    gallery: [
-      U("photo-1486325212027-8081e485255e"),
-      U("photo-1497366216548-37526070297c"),
-      U("photo-1431576901776-e539bd916ba2"),
-      U("photo-1454165804606-c3d57bc86b40"),
-    ],
-    description:
-      "RIVO Corso este un proiect mixt care aduce împreună spații de birouri clasa A, retail la parter și apartamente cu vedere panoramică. Un punct de reper pentru noul centru de afaceri al orașului, conceput pentru oameni care vor totul la un pas distanță.",
-    specs: [
-      { label: "Suprafață totală", value: "21.400 m²" },
-      { label: "Birouri", value: "Clasa A" },
-      { label: "Retail", value: "12 spații" },
-      { label: "Apartamente", value: "58 unități" },
-      { label: "Certificare", value: "BREEAM Very Good" },
-      { label: "Predare", value: "Q2 2026" },
-    ],
-    typologies: [
-      { name: "Studio", surface: "38–46 m²", rooms: "1" },
-      { name: "2 camere", surface: "58–72 m²", rooms: "2" },
-      { name: "3 camere", surface: "84–104 m²", rooms: "3" },
-    ],
-    amenities: [
-      "Birouri clasa A",
-      "Retail la parter",
-      "Certificare BREEAM",
-      "Terase verzi",
-      "Stații de încărcare EV",
-      "Securitate 24/7",
-    ],
-    map: { lat: 47.7905, lng: 22.8772 },
-  },
-  {
-    slug: "rivo-villas-noua",
-    name: "RIVO Villas Noua",
-    tagline: "Case individuale într-o comunitate restrânsă.",
-    location: "Cartier Noua, Satu Mare",
-    status: "in-vanzare",
-    type: "rezidential",
-    year: "2025",
-    progress: 55,
-    cover: U("photo-1564013799919-ab600027ffc6"),
-    gallery: [
-      U("photo-1564013799919-ab600027ffc6"),
-      U("photo-1568605114967-8130f3a36994"),
-      U("photo-1576941089067-2de3c901e126"),
-      U("photo-1600585154340-be6161a56a0c"),
-    ],
-    description:
-      "O comunitate restrânsă de 18 case individuale, cu grădini private și arhitectură contemporană. RIVO Villas Noua îmbină intimitatea unei case proprii cu avantajele unei comunități securizate, la doar câteva minute de centrul orașului.",
-    specs: [
-      { label: "Case", value: "18 unități" },
-      { label: "Tipologii", value: "4–5 camere" },
-      { label: "Suprafață utilă", value: "146–198 m²" },
-      { label: "Teren", value: "320–540 m²" },
-      { label: "Garaj", value: "1–2 locuri" },
-      { label: "Predare", value: "Q3 2025" },
-    ],
-    typologies: [
-      { name: "Vilă tip A", surface: "146 m²", rooms: "4" },
-      { name: "Vilă tip B", surface: "172 m²", rooms: "4" },
-      { name: "Vilă tip C", surface: "198 m²", rooms: "5" },
-    ],
-    amenities: [
-      "Grădină privată",
-      "Garaj propriu",
-      "Comunitate securizată",
-      "Pompă de căldură",
-      "Panouri fotovoltaice",
-      "Finisaje la alegere",
-    ],
-    map: { lat: 47.8071, lng: 22.8694 },
-  },
-  {
-    slug: "rivo-skyline-tower",
-    name: "RIVO Skyline",
-    tagline: "Cel mai înalt punct rezidențial al orașului.",
-    location: "Zona Centrală, Satu Mare",
+    slug: "noroieni-residence",
+    name: "Noroieni Residence",
+    tagline: "Ansamblu rezidențial RIVO în zona Noroieni.",
+    location: "Noroieni, Satu Mare",
     status: "in-curand",
     type: "rezidential",
-    year: "2027",
-    progress: 8,
-    cover: U("photo-1470071459604-3b5ec3a7fe05"),
-    gallery: [
-      U("photo-1470071459604-3b5ec3a7fe05"),
-      U("photo-1449157291145-7efd050a4d0e"),
-      U("photo-1480714378408-67cf0d13bc1b"),
-      U("photo-1502672260266-1c1ef2d93688"),
-    ],
+    year: "",
+    progress: 0,
+    cover: U("photo-1512917774080-9991f1c4c750"),
+    gallery: [],
+    stages: [],
     description:
-      "RIVO Skyline va deveni cel mai înalt punct rezidențial al Satu Mare-ului. Un turn cu apartamente premium și penthouse-uri cu vedere de 360°, sky-lobby la ultimul etaj și servicii de tip hotelier. Lansare în curând — înscrie-te pe lista de priorități.",
-    specs: [
-      { label: "Regim înălțime", value: "S+P+14E" },
-      { label: "Apartamente", value: "120 unități" },
-      { label: "Penthouse", value: "6 unități" },
-      { label: "Sky-lobby", value: "Etaj 14" },
-      { label: "Servicii", value: "Concierge" },
-      { label: "Lansare", value: "2027" },
-    ],
-    typologies: [
-      { name: "2 camere", surface: "62–74 m²", rooms: "2" },
-      { name: "3 camere", surface: "92–118 m²", rooms: "3" },
-      { name: "Penthouse", surface: "180–240 m²", rooms: "4+" },
-    ],
-    amenities: [
-      "Sky-lobby panoramic",
-      "Concierge 24/7",
-      "Fitness & spa",
-      "Penthouse-uri exclusiviste",
-      "Parcare subterană",
-      "Vedere 360°",
-    ],
-    map: { lat: 47.792, lng: 22.8851 },
-  },
-  {
-    slug: "rivo-green-court",
-    name: "RIVO Green Court",
-    tagline: "Locuire sustenabilă, în jurul unei curți verzi.",
-    location: "Zona Micro 17, Satu Mare",
-    status: "finalizat",
-    type: "rezidential",
-    year: "2023",
-    progress: 100,
-    cover: U("photo-1460317442991-0ec209397118"),
-    gallery: [
-      U("photo-1460317442991-0ec209397118"),
-      U("photo-1522708323590-d24dbb6b0267"),
-      U("photo-1502005229762-cf1b2da7c5d6"),
-      U("photo-1416331108676-a22ccb276e35"),
-    ],
-    description:
-      "Primul proiect RIVO finalizat și locuit integral. RIVO Green Court este construit în jurul unei curți interioare verzi, cu apartamente eficiente energetic și o comunitate vie. Un exemplu de ce înseamnă predarea la timp și calitatea promisă.",
-    specs: [
-      { label: "Apartamente", value: "96 unități" },
-      { label: "Regim înălțime", value: "S+P+4E" },
-      { label: "Tipologii", value: "1–4 camere" },
-      { label: "Eficiență", value: "Clasa A" },
-      { label: "Curte verde", value: "1.200 m²" },
-      { label: "Status", value: "Finalizat 2023" },
-    ],
-    typologies: [
-      { name: "1 cameră", surface: "38–44 m²", rooms: "1" },
-      { name: "2 camere", surface: "56–68 m²", rooms: "2" },
-      { name: "3 camere", surface: "80–98 m²", rooms: "3" },
-    ],
-    amenities: [
-      "Curte interioară verde",
-      "Eficiență energetică clasa A",
-      "Loc de joacă",
-      "Parcare exterioară",
-      "Spații comerciale la parter",
-      "Comunitate locuită",
-    ],
-    map: { lat: 47.7831, lng: 22.8576 },
-  },
-  {
-    slug: "rivo-riverside",
-    name: "RIVO Riverside",
-    tagline: "Apartamente cu fața la râul Someș.",
-    location: "Faleza Someș, Satu Mare",
-    status: "in-curand",
-    type: "mixt",
-    year: "2027",
-    progress: 3,
-    cover: U("photo-1502005097973-6a7082348e28"),
-    gallery: [
-      U("photo-1502005097973-6a7082348e28"),
-      U("photo-1487958449943-2429e8be8625"),
-      U("photo-1429497419816-9ca5cfb4571a"),
-      U("photo-1518005020951-eccb494ad742"),
-    ],
-    description:
-      "RIVO Riverside aduce locuirea premium pe malul Someșului. Un ansamblu cu promenadă publică, cafenele la parter și apartamente cu balcoane generoase orientate spre apă. Proiect în pregătire — detalii complete în curând.",
-    specs: [
-      { label: "Apartamente", value: "72 unități" },
-      { label: "Promenadă", value: "Acces public" },
-      { label: "Retail", value: "Cafenele & bistro" },
-      { label: "Tipologii", value: "2–4 camere" },
-      { label: "Vedere", value: "Spre râu" },
-      { label: "Lansare", value: "2027" },
-    ],
-    typologies: [
-      { name: "2 camere", surface: "60–70 m²", rooms: "2" },
-      { name: "3 camere", surface: "88–110 m²", rooms: "3" },
-      { name: "4 camere", surface: "120–150 m²", rooms: "4" },
-    ],
-    amenities: [
-      "Promenadă pe mal",
-      "Balcoane spre râu",
-      "Cafenele la parter",
-      "Piste de biciclete",
-      "Parcare subterană",
-      "Spații verzi",
-    ],
-    map: { lat: 47.7968, lng: 22.8729 },
+      "Noroieni Residence este un ansamblu rezidențial dezvoltat de RIVO Imobiliare în zona Noroieni, Satu Mare. Detaliile complete — tipologii, suprafețe, facilități și termene de predare — urmează să fie publicate.",
+    specs: [],
+    typologies: [],
+    amenities: [],
+    map: { lat: 47.7929, lng: 22.8857 },
   },
 ];
-
-/** Compatibilitate: unele componente client folosesc lista seed ca fallback. */
-export const PROJECTS = SEED_PROJECTS;

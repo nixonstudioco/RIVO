@@ -141,15 +141,23 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
                 <MapPin size={16} className="mt-0.5 shrink-0 text-accent" />
                 <span>{settings.contact.address}</span>
               </li>
-              <li className="flex items-center gap-3">
-                <Phone size={16} className="shrink-0 text-accent" />
-                <a
-                  href={`tel:${settings.contact.phone.replace(/\s/g, "")}`}
-                  className="link-underline"
-                >
-                  {settings.contact.phone}
-                </a>
-              </li>
+              {/* Câmpul poate conține mai multe numere separate prin „/" —
+                  fiecare primește propriul link tel:. */}
+              {settings.contact.phone
+                .split("/")
+                .map((tel) => tel.trim())
+                .filter(Boolean)
+                .map((tel) => (
+                  <li key={tel} className="flex items-center gap-3">
+                    <Phone size={16} className="shrink-0 text-accent" />
+                    <a
+                      href={`tel:${tel.replace(/\s/g, "")}`}
+                      className="link-underline"
+                    >
+                      {tel}
+                    </a>
+                  </li>
+                ))}
               <li className="flex items-center gap-3">
                 <Mail size={16} className="shrink-0 text-accent" />
                 <a

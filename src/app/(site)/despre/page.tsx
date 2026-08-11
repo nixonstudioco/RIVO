@@ -4,38 +4,13 @@ import { Compass, HeartHandshake, Leaf, Sparkles } from "lucide-react";
 import PageHeader from "@/components/ui/PageHeader";
 import SectionHeading from "@/components/ui/SectionHeading";
 import Reveal, { RevealGroup, RevealItem } from "@/components/ui/Reveal";
-import Counter from "@/components/ui/Counter";
 import MagneticButton from "@/components/ui/MagneticButton";
 
 export const metadata: Metadata = {
   title: "Despre noi",
   description:
-    "Povestea RIVO Imobiliare: cum am ajuns un reper printre dezvoltatorii din Satu Mare, valorile și echipa din spatele proiectelor.",
+    "RIVO Imobiliare — dezvoltator rezidențial din Satu Mare. Valorile și principiile după care construim.",
 };
-
-// TODO: înlocuiește cu echipa reală (nume, roluri, fotografii).
-const TEAM = [
-  {
-    name: "Andrei Rusu",
-    role: "Fondator & CEO",
-    img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    name: "Ioana Varga",
-    role: "Director Dezvoltare",
-    img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    name: "Mihai Crișan",
-    role: "Arhitect-șef",
-    img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    name: "Elena Marc",
-    role: "Director Vânzări",
-    img: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80",
-  },
-];
 
 const VALUES = [
   {
@@ -82,7 +57,7 @@ export default function DesprePage() {
             <div className="relative aspect-[4/5] overflow-hidden rounded-2xl">
               <Image
                 src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=80"
-                alt="Echipa RIVO pe șantier"
+                alt="Ansamblu rezidențial în construcție"
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"
@@ -93,11 +68,11 @@ export default function DesprePage() {
           <div className="lg:col-span-6">
             <SectionHeading
               index="01"
-              eyebrow="Povestea noastră"
+              eyebrow="Cine suntem"
               title={
                 <>
-                  De la o idee, la un reper al{" "}
-                  <span className="italic text-accent">orașului</span>
+                  Un început construit pe{" "}
+                  <span className="italic text-accent">standarde</span>
                 </>
               }
             />
@@ -105,9 +80,9 @@ export default function DesprePage() {
               <div className="mt-8 space-y-5 font-sans text-base leading-relaxed text-bone/60">
                 <p>
                   RIVO a pornit dintr-o convingere simplă: Satu Mare merită
-                  locuințe la standardele orașelor din Vest. Am început cu un
-                  singur teren și multă ambiție, iar astăzi suntem printre
-                  dezvoltatorii de referință ai regiunii.
+                  locuințe la standardele orașelor din Vest. Suntem un
+                  dezvoltator tânăr și tratăm asta ca pe un avantaj — putem
+                  construi de la zero exact așa cum credem că trebuie făcut.
                 </p>
                 <p>
                   Fiecare proiect este pentru noi o promisiune. De aceea
@@ -117,25 +92,6 @@ export default function DesprePage() {
                 </p>
               </div>
             </Reveal>
-
-            <div className="mt-12 grid grid-cols-3 gap-6">
-              {[
-                { v: 12, s: "+", l: "Ani" },
-                { v: 9, s: "", l: "Proiecte" },
-                { v: 1450, s: "+", l: "Unități" },
-              ].map((stat) => (
-                <Reveal key={stat.l}>
-                  <div>
-                    <p className="font-serif text-4xl text-bone">
-                      <Counter value={stat.v} suffix={stat.s} />
-                    </p>
-                    <p className="mt-1 font-sans text-sm text-bone/50">
-                      {stat.l}
-                    </p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
           </div>
         </div>
       </section>
@@ -159,44 +115,6 @@ export default function DesprePage() {
                   <h3 className="mt-6 font-serif text-xl text-bone">{title}</h3>
                   <p className="mt-3 font-sans text-sm leading-relaxed text-bone/55">
                     {text}
-                  </p>
-                </div>
-              </RevealItem>
-            ))}
-          </RevealGroup>
-        </div>
-      </section>
-
-      {/* Echipă */}
-      <section className="border-t border-bone/10 py-24 lg:py-32">
-        <div className="container-rivo">
-          <SectionHeading
-            index="03"
-            eyebrow="Echipă"
-            title="Oamenii din spatele RIVO"
-            description="O echipă mică, dedicată, care pune pasiune în fiecare metru pătrat."
-          />
-          <RevealGroup
-            className="mt-14 grid grid-cols-2 gap-6 lg:grid-cols-4"
-            stagger={0.1}
-          >
-            {TEAM.map((member) => (
-              <RevealItem key={member.name}>
-                <div className="group">
-                  <div className="relative aspect-[3/4] overflow-hidden rounded-2xl bg-ink-muted">
-                    <Image
-                      src={member.img}
-                      alt={member.name}
-                      fill
-                      sizes="(max-width: 1024px) 50vw, 25vw"
-                      className="object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105"
-                    />
-                  </div>
-                  <h3 className="mt-4 font-serif text-lg text-bone">
-                    {member.name}
-                  </h3>
-                  <p className="font-sans text-sm text-accent-soft">
-                    {member.role}
                   </p>
                 </div>
               </RevealItem>

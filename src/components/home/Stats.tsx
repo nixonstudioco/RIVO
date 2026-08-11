@@ -6,6 +6,8 @@ import type { StatItem } from "@/lib/types";
 
 export default function Stats({ stats }: { stats: StatItem[] }) {
   const STATS = stats;
+  // Fără cifre configurate nu randăm banda goală (dezvoltator fără istoric).
+  if (STATS.length === 0) return null;
   return (
     <section className="relative overflow-hidden border-y border-bone/10 bg-ink-soft py-20 lg:py-28">
       <div className="container-rivo">

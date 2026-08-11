@@ -48,6 +48,18 @@ export function normalizeProject(input: any): Project {
     gallery: Array.isArray(input?.gallery)
       ? input.gallery.filter((g: unknown) => typeof g === "string" && g)
       : [],
+    stages: Array.isArray(input?.stages)
+      ? input.stages
+          .map((s: any) => ({
+            label: str(s?.label),
+            date: str(s?.date),
+            images: Array.isArray(s?.images)
+              ? s.images.filter((i: unknown) => typeof i === "string" && i)
+              : [],
+          }))
+          // O etapă fără nume, fără lună și fără imagini nu are ce căuta salvată.
+          .filter((s: any) => s.label || s.date || s.images.length)
+      : [],
     description: str(input?.description),
     specs: Array.isArray(input?.specs)
       ? input.specs

@@ -4,7 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Plus, Trash2, Loader2, ArrowLeft, Save } from "lucide-react";
-import type { Project, ProjectStatus, ProjectType } from "@/lib/projects";
+import type {
+  Project,
+  ProjectStage,
+  ProjectStatus,
+  ProjectType,
+} from "@/lib/projects";
 import { STATUS_LABELS, TYPE_LABELS } from "@/lib/projects";
 import ImageUploader from "./ImageUploader";
 
@@ -19,6 +24,7 @@ const EMPTY: Project = {
   progress: 0,
   cover: "",
   gallery: [],
+  stages: [],
   description: "",
   specs: [],
   typologies: [],
@@ -50,6 +56,13 @@ export default function ProjectForm({
 
   const set = <K extends keyof Project>(key: K, val: Project[K]) =>
     setP((prev) => ({ ...prev, [key]: val }));
+
+  /** Actualizează o singură etapă din listă. */
+  const setStage = (i: number, patch: Partial<ProjectStage>) =>
+    setP((prev) => ({
+      ...prev,
+      stages: prev.stages.map((s, si) => (si === i ? { ...s, ...patch } : s)),
+    }));
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -211,6 +224,102 @@ export default function ProjectForm({
                 onClick={() => set("gallery", [...p.gallery, ""])}
               />
             </div>
+          </Section>
+
+          {/* Etape de dezvoltare */}
+          <Section title="Etape de dezvoltare">
+            <p className="-mt-1 font-sans text-xs leading-relaxed text-bone/40">
+              Opțional. Grupează fotografiile de șantier pe etape sau pe luni
+              (ex. „Fundație — Martie 2026”). Pe pagina proiectului apar ca
+              filtre peste galerie. Fără etape, galeria rămâne o listă simplă.
+            </p>
+
+            <div className="space-y-4">
+              {p.stages.map((st, i) => (
+                <div
+                  key={i}
+                  className="rounded-xl border border-bone/10 bg-ink p-4"
+                >
+                  <div className="flex flex-wrap items-end gap-2">
+                    <div className="min-w-[180px] flex-1">
+                      <label className={labelCls}>Etapă</label>
+                      <input
+                        className={inputCls}
+                        placeholder="ex: Structură la roșu"
+                        value={st.label}
+                        onChange={(e) => setStage(i, { label: e.target.value })}
+                      />
+                    </div>
+                    <div className="w-[170px]">
+                      <label className={labelCls}>Luna</label>
+                      <input
+                        type="month"
+                        className={`${inputCls} [&::-webkit-calendar-picker-indicator]:invert`}
+                        value={st.date}
+                        onChange={(e) => setStage(i, { date: e.target.value })}
+                      />
+                    </div>
+                    <RemoveBtn
+                      onClick={() =>
+                        set(
+                          "stages",
+                          p.stages.filter((_, si) => si !== i)
+                        )
+                      }
+                    />
+                  </div>
+
+                  <div className="mt-4 space-y-3">
+                    {st.images.map((img, ii) => (
+                      <div key={ii} className="flex items-start gap-2">
+                        <div className="flex-1">
+                          <ImageUploader
+                            compact
+                            value={img}
+                            onChange={(url) =>
+                              setStage(i, {
+                                images: st.images.map((g, gi) =>
+                                  gi === ii ? url : g
+                                ),
+                              })
+                            }
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          aria-label="Elimină imaginea"
+                          onClick={() =>
+                            setStage(i, {
+                              images: st.images.filter((_, gi) => gi !== ii),
+                            })
+                          }
+                          className="mt-1 flex h-9 w-9 items-center justify-center rounded-lg border border-bone/15 text-bone/50 hover:border-red-400/50 hover:text-red-300"
+                        >
+                          <Trash2 size={15} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+
+                  <AddBtn
+                    label="Adaugă imagine în etapă"
+                    onClick={() =>
+                      setStage(i, { images: [...st.images, ""] })
+                    }
+                  />
+                </div>
+              ))}
+            </div>
+
+            <AddBtn
+              label="Adaugă etapă"
+              onClick={() =>
+                set("stages", [
+                  ...p.stages,
+                  { label: "", date: "", images: [] },
+                ])
+              }
+            />
           </Section>
 
           {/* Specificații */}

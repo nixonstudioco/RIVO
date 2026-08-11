@@ -4,7 +4,6 @@ import Stats from "@/components/home/Stats";
 import Projects from "@/components/home/Projects";
 import WhyRivo from "@/components/home/WhyRivo";
 import Process from "@/components/home/Process";
-import Testimonials from "@/components/home/Testimonials";
 import CtaContact from "@/components/home/CtaContact";
 import { getProjects, getSettings } from "@/lib/store";
 
@@ -24,7 +23,6 @@ export default async function HomePage() {
       <Projects projects={projects} />
       <WhyRivo />
       <Process />
-      <Testimonials />
       <CtaContact />
     </>
   );
