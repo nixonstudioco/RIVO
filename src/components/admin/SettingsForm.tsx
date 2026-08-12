@@ -251,7 +251,11 @@ export default function SettingsForm({ initial }: { initial: SiteSettings }) {
               }
             />
           </Field>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <p className="font-sans text-xs text-bone/40">
+            Lăsat gol, contul nu apare în footer și nu e trimis către Google —
+            mai bine decât un link mort.
+          </p>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <Field label="Instagram URL">
               <input
                 className={inputCls}
@@ -272,6 +276,18 @@ export default function SettingsForm({ initial }: { initial: SiteSettings }) {
                   setS({
                     ...s,
                     social: { ...s.social, facebook: e.target.value },
+                  })
+                }
+              />
+            </Field>
+            <Field label="TikTok URL">
+              <input
+                className={inputCls}
+                value={s.social.tiktok ?? ""}
+                onChange={(e) =>
+                  setS({
+                    ...s,
+                    social: { ...s.social, tiktok: e.target.value },
                   })
                 }
               />

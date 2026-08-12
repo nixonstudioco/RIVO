@@ -26,8 +26,14 @@ export const DEFAULT_SETTINGS: SiteSettings = {
     program: "Luni–Vineri: 09:00–18:00\nSâmbătă: 10:00–14:00",
   },
   social: {
-    instagram: "#",
-    facebook: "#",
-    linkedin: "#",
+    instagram: "https://www.instagram.com/rivoimobiliare",
+    // URL-ul canonic al paginii, nu linkul de tip /share/ primit inițial:
+    // acela e un redirect, iar `sameAs` din datele structurate funcționează mai
+    // sigur cu adresa finală a profilului.
+    facebook: "https://www.facebook.com/people/RIVO-Imobiliare/61591880582271/",
+    tiktok: "https://www.tiktok.com/@rivo.imobiliare",
+    // Fără cont LinkedIn deocamdată — gol înseamnă că nu se afișează deloc,
+    // în loc de un link mort.
+    linkedin: "",
   },
 };

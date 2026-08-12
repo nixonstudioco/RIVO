@@ -45,12 +45,14 @@ export function OrganizationJsonLd({ settings }: { settings: SiteSettings }) {
   const { street, city } = splitAddress(settings.contact.address);
   const phones = splitPhones(settings.contact.phone);
 
-  // Linkurile de social încă neconfigurate sunt „#" — nu le trimitem.
+  // Linkurile neconfigurate („#" sau gol) nu se trimit: `sameAs` cu adrese
+  // false ar strica potrivirea profilurilor firmei făcută de Google.
   const sameAs = [
     settings.social.facebook,
     settings.social.instagram,
+    settings.social.tiktok,
     settings.social.linkedin,
-  ].filter((u) => u && u !== "#" && u.startsWith("http"));
+  ].filter((u): u is string => !!u && u !== "#" && u.startsWith("http"));
 
   const org = {
     "@context": "https://schema.org",

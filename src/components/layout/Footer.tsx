@@ -13,6 +13,7 @@ import {
   Phone,
 } from "lucide-react";
 import Marquee from "@/components/ui/Marquee";
+import TikTok from "@/components/ui/icons/TikTok";
 import type { SiteSettings } from "@/lib/types";
 
 const FOOTER_NAV = [
@@ -29,11 +30,14 @@ const LEGAL = [
 ];
 
 export default function Footer({ settings }: { settings: SiteSettings }) {
+  // Afișăm doar conturile configurate cu adevărat: un „#" sau un câmp gol ar
+  // produce un link mort în footer.
   const SOCIAL = [
-    { href: settings.social.instagram || "#", label: "Instagram", icon: Instagram },
-    { href: settings.social.facebook || "#", label: "Facebook", icon: Facebook },
-    { href: settings.social.linkedin || "#", label: "LinkedIn", icon: Linkedin },
-  ];
+    { href: settings.social.instagram, label: "Instagram", icon: Instagram },
+    { href: settings.social.facebook, label: "Facebook", icon: Facebook },
+    { href: settings.social.tiktok, label: "TikTok", icon: TikTok },
+    { href: settings.social.linkedin, label: "LinkedIn", icon: Linkedin },
+  ].filter((s) => s.href && s.href !== "#");
 
   const [email, setEmail] = useState("");
   const [subscribed, setSubscribed] = useState(false);
@@ -171,23 +175,27 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
           </div>
 
           {/* Social */}
-          <div className="lg:col-span-2">
-            <h3 className="font-sans text-xs uppercase tracking-[0.25em] text-bone/40">
-              Urmărește-ne
-            </h3>
-            <div className="mt-6 flex gap-3">
-              {SOCIAL.map(({ href, label, icon: Icon }) => (
-                <a
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  className="flex h-11 w-11 items-center justify-center rounded-full border border-bone/15 text-bone/70 transition-all duration-300 hover:border-accent hover:text-accent"
-                >
-                  <Icon size={18} />
-                </a>
-              ))}
+          {SOCIAL.length > 0 && (
+            <div className="lg:col-span-2">
+              <h3 className="font-sans text-xs uppercase tracking-[0.25em] text-bone/40">
+                Urmărește-ne
+              </h3>
+              <div className="mt-6 flex flex-wrap gap-3">
+                {SOCIAL.map(({ href, label, icon: Icon }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    aria-label={label}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex h-11 w-11 items-center justify-center rounded-full border border-bone/15 text-bone/70 transition-all duration-300 hover:border-accent hover:text-accent"
+                  >
+                    <Icon size={18} />
+                  </a>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         <div className="mt-16 hairline" />

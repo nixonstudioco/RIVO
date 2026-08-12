@@ -34,6 +34,12 @@ export interface SiteSettings {
     instagram: string;
     facebook: string;
     linkedin: string;
+    /**
+     * Opțional: setările salvate înainte de introducerea câmpului nu îl au, iar
+     * `getSettings` combină doar la primul nivel — `social` din store
+     * înlocuiește obiectul implicit în întregime.
+     */
+    tiktok?: string;
   };
 }
 
