@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   title: "Contact",
   description:
     "Contactează RIVO Imobiliare din Satu Mare. Programează o vizionare sau cere o ofertă pentru proiectele noastre rezidențiale.",
+  alternates: { canonical: "/contact" },
 };
 
 export default async function ContactPage() {

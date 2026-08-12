@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Inter } from "next/font/google";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -15,16 +16,14 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const SITE_URL = "https://rivo-imobiliare.ro";
-
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  alternates: { canonical: "/" },
   title: {
-    default: "RIVO Imobiliare — Dezvoltator rezidențial premium în Satu Mare",
-    template: "%s · RIVO Imobiliare",
+    default: `${SITE_NAME} — Dezvoltator rezidențial premium în Satu Mare`,
+    template: `%s · ${SITE_NAME}`,
   },
-  description:
-    "RIVO Imobiliare dezvoltă proiecte rezidențiale și mixte premium în Satu Mare. Construim viitorul orașului — apartamente, case și ansambluri cu finisaje de calitate, predate la timp.",
+  description: SITE_DESCRIPTION,
   keywords: [
     "RIVO Imobiliare",
     "dezvoltator imobiliar Satu Mare",
@@ -32,12 +31,16 @@ export const metadata: Metadata = {
     "proiecte rezidențiale Satu Mare",
     "case Satu Mare",
   ],
-  authors: [{ name: "RIVO Imobiliare" }],
+  authors: [{ name: SITE_NAME }],
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
+  applicationName: SITE_NAME,
+  category: "real estate",
   openGraph: {
     type: "website",
     locale: "ro_RO",
     url: SITE_URL,
-    siteName: "RIVO Imobiliare",
+    siteName: SITE_NAME,
     title: "RIVO Imobiliare — Construit în jurul viitorului tău",
     description:
       "Proiecte rezidențiale și mixte premium în Satu Mare. Descoperă ansamblurile RIVO.",
@@ -48,7 +51,18 @@ export const metadata: Metadata = {
     description:
       "Proiecte rezidențiale și mixte premium în Satu Mare. Descoperă ansamblurile RIVO.",
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      // Fără limită la lungimea descrierii și mărimea previzualizărilor.
+      "max-snippet": -1,
+      "max-image-preview": "large",
+      "max-video-preview": -1,
+    },
+  },
 };
 
 export const viewport: Viewport = {

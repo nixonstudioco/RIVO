@@ -9,6 +9,7 @@ import ProgressBar from "@/components/projects/ProgressBar";
 import ProjectCard from "@/components/projects/ProjectCard";
 import Reveal from "@/components/ui/Reveal";
 import MagneticButton from "@/components/ui/MagneticButton";
+import { BreadcrumbJsonLd, ProjectJsonLd } from "@/components/seo/JsonLd";
 
 export const dynamic = "force-dynamic";
 
@@ -23,10 +24,13 @@ export async function generateMetadata({
   return {
     title: project.name,
     description: `${project.tagline} ${project.location}. ${project.description.slice(0, 120)}`,
+    alternates: { canonical: `/proiecte/${project.slug}` },
     openGraph: {
+      type: "website",
+      url: `/proiecte/${project.slug}`,
       title: `${project.name} · RIVO Imobiliare`,
       description: project.tagline,
-      images: [project.cover],
+      images: project.cover ? [{ url: project.cover, alt: project.name }] : [],
     },
   };
 }
@@ -52,6 +56,21 @@ export default async function ProjectPage({
 
   return (
     <article>
+      <ProjectJsonLd
+        name={project.name}
+        description={project.description}
+        slug={project.slug}
+        location={project.location}
+        images={[project.cover, ...project.gallery].filter(Boolean)}
+      />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Acasă", path: "/" },
+          { name: "Proiecte", path: "/proiecte" },
+          { name: project.name, path: `/proiecte/${project.slug}` },
+        ]}
+      />
+
       <ProjectDetailHero project={project} />
 
       {/* Descriere + specificații */}

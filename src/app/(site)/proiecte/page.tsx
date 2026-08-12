@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   title: "Proiecte",
   description:
     "Descoperă toate proiectele rezidențiale și mixte RIVO din Satu Mare — în construcție, în vânzare, finalizate sau în curând.",
+  alternates: { canonical: "/proiecte" },
 };
 
 export default async function ProiectePage() {

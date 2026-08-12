@@ -3,6 +3,7 @@ import CustomCursor from "@/components/layout/CustomCursor";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import PageTransition from "@/components/layout/PageTransition";
+import { OrganizationJsonLd } from "@/components/seo/JsonLd";
 import { getSettings } from "@/lib/store";
 
 // Reflectă imediat modificările din /admin (setări, contact etc.).
@@ -17,6 +18,7 @@ export default async function SiteLayout({
 
   return (
     <div className="grain">
+      <OrganizationJsonLd settings={settings} />
       <SmoothScroll>
         <CustomCursor />
         <Navbar settings={settings} />

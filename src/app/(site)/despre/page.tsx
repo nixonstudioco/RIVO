@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: "Despre noi",
   description:
     "RIVO Imobiliare — dezvoltator rezidențial din Satu Mare. Valorile și principiile după care construim.",
+  alternates: { canonical: "/despre" },
 };
 
 const VALUES = [
