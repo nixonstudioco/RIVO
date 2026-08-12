@@ -12,6 +12,7 @@ import type {
 } from "@/lib/projects";
 import { STATUS_LABELS, TYPE_LABELS } from "@/lib/projects";
 import ImageUploader from "./ImageUploader";
+import ImageDropzone from "./ImageDropzone";
 
 const EMPTY: Project = {
   slug: "",
@@ -62,6 +63,19 @@ export default function ProjectForm({
     setP((prev) => ({
       ...prev,
       stages: prev.stages.map((s, si) => (si === i ? { ...s, ...patch } : s)),
+    }));
+
+  // Adăugările din drag & drop citesc starea anterioară: mai multe încărcări
+  // se pot încheia în paralel, iar o variantă bazată pe closure le-ar suprascrie.
+  const appendGallery = (urls: string[]) =>
+    setP((prev) => ({ ...prev, gallery: [...prev.gallery, ...urls] }));
+
+  const appendStageImages = (i: number, urls: string[]) =>
+    setP((prev) => ({
+      ...prev,
+      stages: prev.stages.map((s, si) =>
+        si === i ? { ...s, images: [...s.images, ...urls] } : s
+      ),
     }));
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -219,8 +233,9 @@ export default function ProjectForm({
                   </div>
                 ))}
               </div>
+              <ImageDropzone onUploaded={appendGallery} />
               <AddBtn
-                label="Adaugă imagine în galerie"
+                label="Adaugă manual un URL"
                 onClick={() => set("gallery", [...p.gallery, ""])}
               />
             </div>
@@ -301,8 +316,12 @@ export default function ProjectForm({
                     ))}
                   </div>
 
+                  <ImageDropzone
+                    hint="Pozele de șantier din această etapă"
+                    onUploaded={(urls) => appendStageImages(i, urls)}
+                  />
                   <AddBtn
-                    label="Adaugă imagine în etapă"
+                    label="Adaugă manual un URL"
                     onClick={() =>
                       setStage(i, { images: [...st.images, ""] })
                     }
