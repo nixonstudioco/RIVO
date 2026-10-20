@@ -107,12 +107,19 @@ export function stageLabel(stage: ProjectStage): string {
 const U = (id: string, w = 1600) =>
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=80`;
 
+/** Randări găzduite în bucket-ul public de storage al proiectului. */
+const M = (file: string) =>
+  `https://lrkbkticgskmztvkmtuj.supabase.co/storage/v1/object/public/rivo-media/uploads/${file}`;
+
 /**
- * Date seed. Sursa „vie" la runtime este store-ul (`@/lib/store`).
+ * Date seed. Sursa „vie" la runtime este store-ul (`@/lib/store`), iar valorile
+ * de aici se aplică doar când tabelele sunt goale. Le ținem totuși în acord cu
+ * producția: dacă store-ul e vreodată re-inițializat, site-ul trebuie să revină
+ * la conținutul real, nu la placeholdere.
  *
- * TODO(RIVO): imaginile sunt placeholdere, iar specificațiile/tipologiile/
- * facilitățile sunt goale intenționat — se completează cu date reale din
- * /admin → Proiecte. Nu adăuga aici informații nedocumentate.
+ * TODO(RIVO): Cubic are încă imagine placeholder aici (în producție are poze
+ * reale), iar specificațiile/tipologiile/facilitățile sunt goale intenționat —
+ * se completează din /admin → Proiecte. Nu adăuga informații nedocumentate.
  */
 export const SEED_PROJECTS: Project[] = [
   {
@@ -139,12 +146,26 @@ export const SEED_PROJECTS: Project[] = [
     name: "Noroieni Residence",
     tagline: "Ansamblu rezidențial RIVO în zona Noroieni.",
     location: "Noroieni, Satu Mare",
-    status: "in-curand",
+    status: "in-constructie",
     type: "rezidential",
     year: "",
-    progress: 0,
-    cover: U("photo-1512917774080-9991f1c4c750"),
-    gallery: [],
+    progress: 80,
+    cover: M("noroieni-residence-01-fatada-principala.jpg"),
+    // Cover-ul nu se repetă în galerie: apare deja în hero-ul paginii, iar
+    // duplicarea l-ar arăta de două ori în lightbox.
+    gallery: [
+      M("noroieni-residence-02-colt-intrare.jpg"),
+      M("noroieni-residence-03-vedere-strada.jpg"),
+      M("noroieni-residence-04-intrare.jpg"),
+      M("noroieni-residence-05-ansamblu-strada.jpg"),
+      M("noroieni-residence-06-ansamblu.jpg"),
+      M("noroieni-residence-07-lateral.jpg"),
+      M("noroieni-residence-08-gradina.jpg"),
+      M("noroieni-residence-09-terasa.jpg"),
+      M("noroieni-residence-10-terasa-detaliu.jpg"),
+      M("noroieni-residence-11-terasa-masa.jpg"),
+      M("noroieni-residence-12-perspectiva.jpg"),
+    ],
     stages: [],
     description:
       "Noroieni Residence este un ansamblu rezidențial dezvoltat de RIVO Imobiliare în zona Noroieni, Satu Mare. Detaliile complete — tipologii, suprafețe, facilități și termene de predare — urmează să fie publicate.",
