@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Reveal from "@/components/ui/Reveal";
@@ -63,12 +63,18 @@ export default function Intro({ manifest }: { manifest: string }) {
               ref={ref}
               className="font-serif text-3xl leading-[1.3] tracking-tight sm:text-4xl lg:text-[2.9rem] lg:leading-[1.28]"
             >
-              {MANIFEST.split(" ").map((word, i) => (
-                <span key={i} className="word inline-block">
-                  {word}
-                  {" "}
-                </span>
-              ))}
+              {/* Spațiul trebuie să stea ÎN AFARA spanului: într-un
+                  `inline-block` spațiul de la final e colapsat de browser, iar
+                  între două inline-block-uri JSX nu emite niciunul — așa ajungeau
+                  cuvintele lipite. `split(/\s+/)` tolerează spații duble sau
+                  rânduri noi venite din /admin. */}
+              {MANIFEST.split(/\s+/)
+                .filter(Boolean)
+                .map((word, i) => (
+                  <Fragment key={i}>
+                    <span className="word inline-block">{word}</span>{" "}
+                  </Fragment>
+                ))}
             </p>
           </div>
         </div>
